@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What We Do — Builders of Ceylon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+
+  <style>
+/* ================================================================
+   ROOT & RESET
+================================================================ */
+:root {
+  --night:        #08051a;
+  --deep:         #110935;
+  --purple:       #1e1050;
+  --gold:         #c9a84c;
+  --gold-lt:      #e8d49a;
+  --gold-pale:    #f4ecca;
+  --white:        #f0ead8;
+  --muted:        rgba(240,234,216,0.52);
+  --green:        #25D366;
+  --green-dk:     #1da851;
+  --ease:         cubic-bezier(0.4, 0, 0.2, 1);
+  --ff-d:         'Cormorant Garamond', Georgia, serif;
+  --ff-b:         'DM Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-b); background: var(--night); color: var(--white); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+
+/* Subtle star-field grain overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: radial-gradient(ellipse 1px 1px at 20% 30%, rgba(255,255,255,0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 80% 15%, rgba(255,255,255,0.04) 0%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 55% 70%, rgba(255,255,255,0.03) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ================================================================
+   REVEAL ON SCROLL
+================================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+}
+.reveal.on { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.12s; }
+.reveal-d2 { transition-delay: 0.24s; }
+.reveal-d3 { transition-delay: 0.36s; }
+
+/* ================================================================
+   NAV
+================================================================ */
+#nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 999;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem 3.5rem;
+  transition: background 0.5s, backdrop-filter 0.5s, border-color 0.5s;
+  border-bottom: 1px solid transparent;
+}
+#nav.scrolled {
+  background: rgba(8,5,26,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: rgba(201,168,76,0.14);
+}
+.logo {
+  font-family: var(--ff-d);
+  font-size: 1.1rem; font-weight: 600; letter-spacing: 0.05em;
+  color: var(--gold-lt);
+}
+.logo strong { font-weight: 700; color: var(--gold); }
+.nav-links { list-style: none; display: flex; gap: 2.6rem; align-items: center; }
+.nav-links a {
+  font-size: 0.76rem; font-weight: 400;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--muted); transition: color 0.22s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold-lt); }
+.nav-links .nav-cta {
+  padding: 0.55rem 1.2rem;
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 50px;
+  color: var(--gold-lt);
+  transition: background 0.22s, border-color 0.22s, color 0.22s;
+}
+.nav-links .nav-cta:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); color: var(--gold); }
+
+/* ================================================================
+   PAGE INTRO HERO
+================================================================ */
+.page-hero {
+  position: relative;
+  padding: 10rem 4rem 5rem;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+/* Ambient radial glow behind the headline */
+.page-hero::before {
+  content: '';
+  position: absolute;
+  top: -10%; left: -5%;
+  width: 60%; height: 100%;
+  background: radial-gradient(ellipse at top left, rgba(201,168,76,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.page-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.3) 40%, rgba(201,168,76,0.3) 60%, transparent 100%);
+}
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.9rem;
+  font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); font-weight: 400; margin-bottom: 1.4rem;
+}
+.hero-tag::before {
+  content: '';
+  display: block; width: 28px; height: 1px; background: var(--gold); flex-shrink: 0;
+}
+
+.hero-h1 {
+  font-family: var(--ff-d);
+  font-size: clamp(3.2rem, 5.5vw, 5.2rem); font-weight: 600; line-height: 1.07;
+  color: var(--white); margin-bottom: 1.4rem;
+  max-width: 780px;
+}
+.hero-h1 em { font-style: italic; color: var(--gold-lt); }
+
+.hero-sub {
+  font-size: clamp(0.88rem, 1.1vw, 1rem); font-weight: 300;
+  color: rgba(240,234,216,0.62); line-height: 1.75;
+  max-width: 500px;
+}
+.hero-divider {
+  width: 100%; height: 1px; margin-top: 4rem;
+  background: linear-gradient(90deg, rgba(201,168,76,0.2) 0%, transparent 70%);
+}
+
+/* ================================================================
+   MARQUEE
+================================================================ */
+.marquee-wrap {
+  overflow: hidden;
+  background: var(--deep);
+  border-top: 1px solid rgba(201,168,76,0.12);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+  padding: 0.9rem 0;
+}
+.marquee-inner {
+  display: flex; align-items: center; width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.marquee-inner:hover { animation-play-state: paused; }
+.m-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0 2rem; white-space: nowrap;
+  font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(240,234,216,0.4);
+}
+.m-sep { color: var(--gold); opacity: 0.4; font-size: 0.4rem; padding: 0 0.3rem; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ================================================================
+   SERVICE SECTION WRAPPER
+================================================================ */
+.services-section { position: relative; }
+
+/* ================================================================
+   SERVICE ROW
+================================================================ */
+.service-row {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 0;
+  align-items: center;
+  padding: 6rem 4rem;
+  border-bottom: 1px solid rgba(201,168,76,0.08);
+  position: relative;
+  transition: background 0.4s var(--ease);
+}
+.service-row:nth-child(odd)  { background: var(--night); }
+.service-row:nth-child(even) { background: rgba(17,9,53,0.6); }
+.service-row:hover { background: rgba(201,168,76,0.03); }
+
+/* Vertical gold accent line on left */
+.service-row::before {
+  content: '';
+  position: absolute; left: 0; top: 20%; bottom: 20%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.35), transparent);
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+.service-row:hover::before { opacity: 1; }
+
+/* ── Text side ── */
+.service-info { padding-right: 5rem; }
+
+.service-num {
+  font-family: var(--ff-d);
+  font-size: 7rem; font-weight: 700; line-height: 0.85;
+  color: rgba(201,168,76,0.06);
+  letter-spacing: -4px; user-select: none;
+  margin-bottom: -0.5rem;
+}
+
+.service-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(201,168,76,0.22);
+  border-radius: 100px;
+  padding: 5px 14px 5px 5px;
+  margin-bottom: 1.2rem;
+  background: rgba(201,168,76,0.05);
+}
+.chip-dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(201,168,76,0.18);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.chip-dot svg {
+  width: 12px; height: 12px;
+  stroke: var(--gold); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.chip-label {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
+  color: var(--gold); text-transform: uppercase;
+}
+
+.service-title {
+  font-family: var(--ff-d);
+  font-size: clamp(2rem, 2.8vw, 2.8rem); font-weight: 600; line-height: 1.1;
+  color: var(--white); margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.service-desc {
+  font-size: 0.96rem; font-weight: 300;
+  color: rgba(240,234,216,0.58); line-height: 1.75;
+  max-width: 440px;
+}
+
+.service-cta {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  margin-top: 1.8rem;
+  font-size: 0.76rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold);
+  transition: gap 0.25s, color 0.22s;
+}
+.service-cta svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.service-cta:hover { gap: 1.1rem; color: var(--gold-lt); }
+
+/* ================================================================
+   IMAGE BOX — broken/fixed with BLACK LINE WIPE
+================================================================ */
+.image-box {
+  position: relative;
+  width: 100%; aspect-ratio: 4/3;
+  border-radius: 14px; overflow: hidden;
+  border: 1px solid rgba(201,168,76,0.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+  background: var(--deep);
+}
+.service-row:hover .image-box {
+  box-shadow: 0 28px 80px rgba(0,0,0,0.65);
+  transform: translateY(-4px);
+  border-color: rgba(201,168,76,0.28);
+}
+
+.image-box img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain; display: block;
+  background: var(--deep);
+}
+
+/* ── THE WIPE: clip-path sweeps the fixed image from BL → full ── */
+.img-fixed {
+  clip-path: polygon(0% 100%, 0% 100%, 0% 100%, 0% 100%, 0% 100%);
+  will-change: clip-path;
+  animation: fixWipe 6s ease-in-out infinite;
+}
+
+@keyframes fixWipe {
+  /* Hidden at BL */
+  0%, 12% {
+    clip-path: polygon(0% 100%, 0% 100%, 0% 100%, 0% 100%, 0% 100%);
+  }
+  /* Phase 1: triangle grows from BL — diagonal leading edge */
+  55% {
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 100%, 0% 0%);
+  }
+  /* Phase 2: full rectangle revealed */
+  65%, 78% {
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%, 100% 0%);
+  }
+  /* Snap back */
+  79%, 100% {
+    clip-path: polygon(0% 100%, 0% 100%, 0% 100%, 0% 100%, 0% 100%);
+  }
+}
+
+/* ── BLACK WIPE LINE drawn on a canvas-sized overlay ── */
+.wipe-line-canvas {
+  position: absolute; inset: 0; z-index: 5;
+  pointer-events: none;
+}
+.wipe-line-canvas::before {
+  content: '';
+  position: absolute;
+  /* The line sits along the wipe diagonal.
+     We use a thin rotated element that moves with the animation. */
+  width: 141.5%; height: 2px;
+  background: #000;
+  transform-origin: left center;
+  transform: rotate(45deg) translateX(-150%);
+  left: 0; top: 0;
+  animation: wipeLine 6s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes wipeLine {
+  /* Hidden */
+  0%, 10% { opacity: 0; transform: rotate(45deg) translateX(-150%); }
+  /* Enter: sweep from off-screen BL toward TR */
+  12%   { opacity: 1; transform: rotate(45deg) translateX(-100%); }
+  55%   { opacity: 1; transform: rotate(45deg) translateX(5%); }
+  /* Exit: reach the TR corner and fade */
+  62%   { opacity: 1; transform: rotate(45deg) translateX(65%); }
+  67%   { opacity: 0; transform: rotate(45deg) translateX(90%); }
+  /* Hidden until reset */
+  68%, 100% { opacity: 0; transform: rotate(45deg) translateX(-150%); }
+}
+
+/* Status tags */
+.img-status {
+  position: absolute; top: 12px; left: 12px; z-index: 10;
+  display: flex; gap: 6px; pointer-events: none;
+}
+.stag {
+  font-size: 0.57rem; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.stag-broken {
+  background: rgba(160,30,20,0.82); color: white;
+  animation: sTagOut 6s ease-in-out infinite;
+}
+.stag-fixed {
+  background: rgba(37,130,70,0.88); color: white;
+  opacity: 0; transform: translateY(4px);
+  animation: sTagIn 6s ease-in-out infinite;
+}
+@keyframes sTagOut {
+  0%,62%   { opacity: 1; transform: translateY(0); }
+  67%,77%  { opacity: 0; transform: translateY(-5px); }
+  80%,100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes sTagIn {
+  0%,62%   { opacity: 0; transform: translateY(5px); }
+  67%,77%  { opacity: 1; transform: translateY(0); }
+  80%,100% { opacity: 0; transform: translateY(5px); }
+}
+
+/* Staggered delays */
+.service-row:nth-child(1) .img-fixed,
+.service-row:nth-child(1) .stag-broken,
+.service-row:nth-child(1) .stag-fixed,
+.service-row:nth-child(1) .wipe-line-canvas::before { animation-delay: 0s; }
+
+.service-row:nth-child(2) .img-fixed,
+.service-row:nth-child(2) .stag-broken,
+.service-row:nth-child(2) .stag-fixed,
+.service-row:nth-child(2) .wipe-line-canvas::before { animation-delay: -1s; }
+
+.service-row:nth-child(3) .img-fixed,
+.service-row:nth-child(3) .stag-broken,
+.service-row:nth-child(3) .stag-fixed,
+.service-row:nth-child(3) .wipe-line-canvas::before { animation-delay: -2s; }
+
+.service-row:nth-child(4) .img-fixed,
+.service-row:nth-child(4) .stag-broken,
+.service-row:nth-child(4) .stag-fixed,
+.service-row:nth-child(4) .wipe-line-canvas::before { animation-delay: -3s; }
+
+.service-row:nth-child(5) .img-fixed,
+.service-row:nth-child(5) .stag-broken,
+.service-row:nth-child(5) .stag-fixed,
+.service-row:nth-child(5) .wipe-line-canvas::before { animation-delay: -4s; }
+
+.service-row:nth-child(6) .img-fixed,
+.service-row:nth-child(6) .stag-broken,
+.service-row:nth-child(6) .stag-fixed,
+.service-row:nth-child(6) .wipe-line-canvas::before { animation-delay: -5s; }
+
+/* ================================================================
+   PORTFOLIO SECTION
+================================================================ */
+.portfolio {
+  background: var(--deep);
+  padding: 7rem 4rem 8rem;
+  position: relative; overflow: hidden;
+}
+.portfolio::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--gold) 40%, var(--gold-lt) 60%, transparent 95%);
+}
+/* Faint blueprint grid */
+.portfolio::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+.portfolio-inner { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; }
+
+.portfolio-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 3.5rem; gap: 1.5rem;
+}
+.port-eyebrow {
+  font-size: 0.66rem; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--gold); font-weight: 400; margin-bottom: 0.6rem; display: block;
+}
+.portfolio-headline {
+  font-family: var(--ff-d);
+  font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 600; line-height: 1.1;
+  color: var(--white);
+}
+.portfolio-headline em { font-style: italic; color: var(--gold-lt); }
+
+.portfolio-controls { display: flex; gap: 10px; flex-shrink: 0; }
+.port-btn {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.35);
+  background: transparent; color: var(--gold); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.22s, border-color 0.22s, color 0.22s;
+}
+.port-btn:hover { background: rgba(201,168,76,0.12); border-color: var(--gold); }
+.port-btn svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.portfolio-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;
+}
+.port-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 12px; aspect-ratio: 4/3;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; cursor: pointer;
+  transition: border-color 0.3s, transform 0.3s, background 0.3s;
+}
+.port-card:hover {
+  border-color: rgba(201,168,76,0.28);
+  transform: translateY(-3px);
+  background: rgba(201,168,76,0.03);
+}
+.port-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: rgba(201,168,76,0.2);
+}
+.port-icon-wrap {
+  width: 44px; height: 44px;
+  background: rgba(201,168,76,0.06); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.port-icon-wrap svg {
+  width: 20px; height: 20px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+}
+.port-placeholder-label {
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+.port-card-footer {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 12px 16px;
+  background: linear-gradient(to top, rgba(8,5,26,0.7), transparent);
+}
+.port-card-title {
+  font-size: 0.75rem; font-weight: 400;
+  color: rgba(240,234,216,0.32);
+}
+
+/* ================================================================
+   FOOTER / CTA
+================================================================ */
+.footer {
+  background: var(--night);
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding: 7rem 4rem 3.5rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.footer-bg-text {
+  position: absolute; top: 3rem; left: 50%; transform: translateX(-50%);
+  font-family: var(--ff-d);
+  font-size: clamp(80px, 14vw, 180px); font-weight: 700;
+  letter-spacing: -6px; color: rgba(201,168,76,0.03);
+  white-space: nowrap; pointer-events: none; user-select: none;
+}
+.footer-inner {
+  position: relative; z-index: 1;
+  max-width: 600px; margin: 0 auto;
+}
+.footer-tag {
+  font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.2rem; display: block;
+}
+.footer-headline {
+  font-family: var(--ff-d);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem); font-weight: 600; line-height: 1.1;
+  color: var(--white); margin-bottom: 1.1rem;
+}
+.footer-headline em { font-style: italic; color: var(--gold-lt); }
+.footer-sub {
+  font-size: 0.97rem; font-weight: 300; line-height: 1.72;
+  color: var(--muted); max-width: 420px; margin: 0 auto 3rem;
+}
+.btn-footer-wa {
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  padding: 1.15rem 2.8rem;
+  background: var(--green); color: #fff;
+  font-family: var(--ff-b); font-size: 1rem; font-weight: 500;
+  border-radius: 50px; cursor: pointer;
+  box-shadow: 0 8px 40px rgba(37,211,102,0.32);
+  transition: transform 0.22s var(--ease), box-shadow 0.22s, background 0.22s;
+  margin-bottom: 4rem;
+}
+.btn-footer-wa:hover {
+  background: var(--green-dk); transform: translateY(-4px);
+  box-shadow: 0 14px 52px rgba(37,211,102,0.5);
+}
+.btn-footer-wa svg { width: 22px; height: 22px; fill: currentColor; flex-shrink: 0; }
+
+.footer-contact-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 2.5rem; margin-bottom: 3rem; flex-wrap: wrap;
+}
+.footer-contact-row a {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.85rem; font-weight: 400; color: var(--muted);
+  transition: color 0.22s;
+}
+.footer-contact-row a:hover { color: var(--gold-lt); }
+.footer-contact-row a svg {
+  width: 15px; height: 15px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.footer-sep { width: 1px; height: 18px; background: rgba(201,168,76,0.18); }
+.footer-bottom {
+  font-size: 0.72rem; color: rgba(240,234,216,0.2);
+  padding-top: 2rem; border-top: 1px solid rgba(201,168,76,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 300; letter-spacing: 0.06em;
+}
+.footer-bottom-logo {
+  font-family: var(--ff-d); font-weight: 600;
+  color: rgba(201,168,76,0.4); font-size: 0.82rem;
+}
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+@media (max-width: 1080px) {
+  .service-row { grid-template-columns: 1fr 380px; }
+}
+@media (max-width: 860px) {
+  #nav { padding: 1.1rem 1.5rem; }
+  .nav-links li:not(:last-child) { display: none; }
+  .page-hero { padding: 8rem 1.5rem 3rem; }
+  .service-row { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2.5rem; }
+  .service-info { padding-right: 0; }
+  .service-num { font-size: 5rem; }
+  .portfolio { padding: 5rem 1.5rem 6rem; }
+  .portfolio-grid { grid-template-columns: 1fr 1fr; }
+  .portfolio-header { flex-direction: column; align-items: flex-start; }
+  .footer { padding: 5rem 1.5rem 2.5rem; }
+  .footer-bottom { flex-direction: column; gap: 0.7rem; text-align: center; }
+  .footer-contact-row { flex-direction: column; gap: 1rem; }
+  .footer-sep { display: none; }
+}
+@media (max-width: 540px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAV
+═══════════════════════════════════════ -->
+<nav id="nav">
+  <a class="logo" href="index.html"><strong>Builders</strong> of Ceylon</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#services" class="active">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a class="nav-cta" href="contact.html">WhatsApp Us</a></li>
+  </ul>
+</nav>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE HERO
+═══════════════════════════════════════ -->
+<section class="page-hero">
+  <span class="hero-tag">What We Do</span>
+  <h1 class="hero-h1">We fix, we build,<br>we <em>transform.</em></h1>
+  <p class="hero-sub">From a dripping tap in Colombo to a full renovation in Gampaha — verified, skilled tradespeople throughout the entire Western Province. Fast. Transparent pricing. Zero stress.</p>
+  <div class="hero-divider"></div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     MARQUEE
+═══════════════════════════════════════ -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="m-item">🔧 Plumbing</span><span class="m-sep">◆</span>
+    <span class="m-item">⚡ Electrical</span><span class="m-sep">◆</span>
+    <span class="m-item">❄️ Air Conditioning</span><span class="m-sep">◆</span>
+    <span class="m-item">🎨 Painting</span><span class="m-sep">◆</span>
+    <span class="m-item">🏗 Construction</span><span class="m-sep">◆</span>
+    <span class="m-item">📺 Appliance Repair</span><span class="m-sep">◆</span>
+    <span class="m-item">🔧 Plumbing</span><span class="m-sep">◆</span>
+    <span class="m-item">⚡ Electrical</span><span class="m-sep">◆</span>
+    <span class="m-item">❄️ Air Conditioning</span><span class="m-sep">◆</span>
+    <span class="m-item">🎨 Painting</span><span class="m-sep">◆</span>
+    <span class="m-item">🏗 Construction</span><span class="m-sep">◆</span>
+    <span class="m-item">📺 Appliance Repair</span><span class="m-sep">◆</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════ -->
+<section class="services-section" id="services">
+
+  <!-- 01 PLUMBING -->
+  <div class="service-row reveal">
+    <div class="service-info">
+      <div class="service-num">01</div>
+      <div class="service-chip">
+        <div class="chip-dot">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94L6.62 20.38a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <span class="chip-label">Plumbing</span>
+      </div>
+      <h2 class="service-title">Taps, Pipes &amp;<br>Drain Solutions</h2>
+      <p class="service-desc">Dripping taps, burst pipes, blocked drains — our plumbers arrive fast and fix it properly. Every job is quoted upfront before work begins. No hidden charges, no surprises.</p>
+      <a href="contact.html" class="service-cta">
+        Book a Plumber
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="image-box">
+      <div class="img-status">
+        <span class="stag stag-broken">Broken</span>
+        <span class="stag stag-fixed">Fixed ✓</span>
+      </div>
+      <img src="images/Tap_broken.png" alt="Leaking tap — plumbing problem" class="img-broken" />
+      <img src="images/Tap_fixed.png"  alt="Fixed tap — plumbing repaired"  class="img-fixed"  />
+      <div class="wipe-line-canvas" aria-hidden="true"></div>
+    </div>
+  </div>
+
+
+  <!-- 02 ELECTRICAL -->
+  <div class="service-row reveal reveal-d1">
+    <div class="service-info">
+      <div class="service-num">02</div>
+      <div class="service-chip">
+        <div class="chip-dot">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <span class="chip-label">Electrical</span>
+      </div>
+      <h2 class="service-title">Wiring, Sockets<br>&amp; Lighting</h2>
+      <p class="service-desc">Faulty wiring, tripping breakers, dead sockets — our certified electricians diagnose and fix electrical issues safely, every time. We don't patch; we solve it properly.</p>
+      <a href="contact.html" class="service-cta">
+        Book an Electrician
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="image-box">
+      <div class="img-status">
+        <span class="stag stag-broken">Broken</span>
+        <span class="stag stag-fixed">Fixed ✓</span>
+      </div>
+      <img src="images/Bulb_broken.png" alt="Burnt out light — electrical problem" class="img-broken" />
+      <img src="images/Bulb_fixed.png"  alt="Working light — electrical fixed"    class="img-fixed"  />
+      <div class="wipe-line-canvas" aria-hidden="true"></div>
+    </div>
+  </div>
+
+
+  <!-- 03 AIR CONDITIONING -->
+  <div class="service-row reveal reveal-d2">
+    <div class="service-info">
+      <div class="service-num">03</div>
+      <div class="service-chip">
+        <div class="chip-dot">
+          <svg viewBox="0 0 24 24"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>
+        </div>
+        <span class="chip-label">Air Conditioning</span>
+      </div>
+      <h2 class="service-title">AC Repair,<br>Service &amp; Install</h2>
+      <p class="service-desc">Error codes, warm air, or strange noises — we service, repair and install all major AC brands throughout the province. We keep you cool through every Sri Lankan summer.</p>
+      <a href="contact.html" class="service-cta">
+        Book AC Service
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="image-box">
+      <div class="img-status">
+        <span class="stag stag-broken">Broken</span>
+        <span class="stag stag-fixed">Fixed ✓</span>
+      </div>
+      <img src="images/AC_broken.png" alt="Broken AC unit — error state"   class="img-broken" />
+      <img src="images/AC_fixed.png"  alt="Working AC unit — blowing cool" class="img-fixed"  />
+      <div class="wipe-line-canvas" aria-hidden="true"></div>
+    </div>
+  </div>
+
+
+  <!-- 04 PAINTING -->
+  <div class="service-row reveal">
+    <div class="service-info">
+      <div class="service-num">04</div>
+      <div class="service-chip">
+        <div class="chip-dot">
+          <svg viewBox="0 0 24 24"><path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 00-2.82 0L8 7l9 9 1.59-1.59a2 2 0 000-2.82L17 10l4.37-4.37a2.12 2.12 0 00-3-3z"/><path d="M9 8c-2 3-4 3.5-7 4l8 8c1-.5 3.5-2 4-7"/></svg>
+        </div>
+        <span class="chip-label">Painting</span>
+      </div>
+      <h2 class="service-title">Interior &amp; Exterior<br>Painting</h2>
+      <p class="service-desc">Transform any space with a flawless coat. Our painters deliver crisp, clean coverage — walls, ceilings, and exteriors — with zero mess left behind when the job is done.</p>
+      <a href="contact.html" class="service-cta">
+        Book Painters
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="image-box">
+      <div class="img-status">
+        <span class="stag stag-broken">Before</span>
+        <span class="stag stag-fixed">After ✓</span>
+      </div>
+      <img src="images/Paint_broken.png" alt="Unpainted wall — before"      class="img-broken" />
+      <img src="images/Paint_fixed.png"  alt="Freshly painted wall — after" class="img-fixed"  />
+      <div class="wipe-line-canvas" aria-hidden="true"></div>
+    </div>
+  </div>
+
+
+  <!-- 05 CONSTRUCTION -->
+  <div class="service-row reveal reveal-d1">
+    <div class="service-info">
+      <div class="service-num">05</div>
+      <div class="service-chip">
+        <div class="chip-dot">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <span class="chip-label">Construction</span>
+      </div>
+      <h2 class="service-title">Building &amp;<br>Renovation Works</h2>
+      <p class="service-desc">Extensions, new rooms, full renovations — we handle construction projects of every scale. Properly planned, properly built and properly finished, on time and on budget.</p>
+      <a href="contact.html" class="service-cta">
+        Get a Quote
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="image-box">
+      <div class="img-status">
+        <span class="stag stag-broken">Before</span>
+        <span class="stag stag-fixed">After ✓</span>
+      </div>
+      <img src="images/Brick_Broken.png" alt="Construction in progress — before" class="img-broken" />
+      <img src="images/Brick_fixed.png"  alt="Complete brick work — after"       class="img-fixed"  />
+      <div class="wipe-line-canvas" aria-hidden="true"></div>
+    </div>
+  </div>
+
+
+  <!-- 06 EQUIPMENT REPAIR -->
+  <div class="service-row reveal reveal-d2">
+    <div class="service-info">
+      <div class="service-num">06</div>
+      <div class="service-chip">
+        <div class="chip-dot">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <span class="chip-label">Equipment Repair</span>
+      </div>
+      <h2 class="service-title">Home Appliance<br>Repair</h2>
+      <p class="service-desc">Cracked TV, broken washing machine, faulty fridge — our technicians repair a wide range of home appliances at fair, transparent rates throughout the Western Province.</p>
+      <a href="contact.html" class="service-cta">
+        Book a Technician
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="image-box">
+      <div class="img-status">
+        <span class="stag stag-broken">Broken</span>
+        <span class="stag stag-fixed">Fixed ✓</span>
+      </div>
+      <img src="images/TV_broken.png" alt="Cracked TV screen — broken"  class="img-broken" />
+      <img src="images/Tv_Fixed.png"  alt="Clear TV screen — repaired"  class="img-fixed"  />
+      <div class="wipe-line-canvas" aria-hidden="true"></div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     PORTFOLIO
+═══════════════════════════════════════ -->
+<section class="portfolio" id="projects">
+  <div class="portfolio-inner">
+
+    <div class="portfolio-header reveal">
+      <div>
+        <span class="port-eyebrow">Our Work</span>
+        <h2 class="portfolio-headline">Recent <em>Projects</em></h2>
+      </div>
+      <div class="portfolio-controls">
+        <button class="port-btn" id="portPrev" aria-label="Previous">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        </button>
+        <button class="port-btn" id="portNext" aria-label="Next">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="portfolio-grid reveal reveal-d1">
+
+      <div class="port-card">
+        <div class="port-placeholder">
+          <div class="port-icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="port-placeholder-label">Coming Soon</span>
+        </div>
+        <div class="port-card-footer">
+          <p class="port-card-title">Full Plumbing Overhaul — Colombo 07</p>
+        </div>
+      </div>
+
+      <div class="port-card">
+        <div class="port-placeholder">
+          <div class="port-icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="port-placeholder-label">Coming Soon</span>
+        </div>
+        <div class="port-card-footer">
+          <p class="port-card-title">Electrical Rewire — Nugegoda</p>
+        </div>
+      </div>
+
+      <div class="port-card">
+        <div class="port-placeholder">
+          <div class="port-icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="port-placeholder-label">Coming Soon</span>
+        </div>
+        <div class="port-card-footer">
+          <p class="port-card-title">Full Renovation — Dehiwala</p>
+        </div>
+      </div>
+
+      <div class="port-card">
+        <div class="port-placeholder">
+          <div class="port-icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="port-placeholder-label">Coming Soon</span>
+        </div>
+        <div class="port-card-footer">
+          <p class="port-card-title">AC Installation ×3 — Kelaniya</p>
+        </div>
+      </div>
+
+      <div class="port-card">
+        <div class="port-placeholder">
+          <div class="port-icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="port-placeholder-label">Coming Soon</span>
+        </div>
+        <div class="port-card-footer">
+          <p class="port-card-title">Interior Painting — Mount Lavinia</p>
+        </div>
+      </div>
+
+      <div class="port-card">
+        <div class="port-placeholder">
+          <div class="port-icon-wrap">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="port-placeholder-label">Coming Soon</span>
+        </div>
+        <div class="port-card-footer">
+          <p class="port-card-title">Room Extension — Gampaha</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER / CTA
+═══════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-bg-text" aria-hidden="true">Ceylon</div>
+  <div class="footer-inner">
+    <span class="footer-tag">Ready to get started?</span>
+    <h2 class="footer-headline">Have a problem?<br>Let's <em>sort it out.</em></h2>
+    <p class="footer-sub">Message us on WhatsApp and we'll get back to you quickly — whether you're in Colombo, Gampaha or Kalutara. One message. Verified technician at your door.</p>
+
+    <a href="https://wa.me/94706922157?text=Hi%20Builders%20of%20Ceylon" target="_blank" rel="noopener" class="btn-footer-wa">
+      <svg viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.1 1.519 5.833L.018 23.982l6.335-1.519A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.626 0 12 0zm.001 21.818a9.8 9.8 0 01-5.07-1.389l-.364-.214-3.76.902.952-3.673-.234-.377A9.797 9.797 0 012.182 12c0-5.413 4.405-9.818 9.818-9.818 5.414 0 9.818 4.405 9.818 9.818 0 5.414-4.404 9.818-9.818 9.818z"/>
+      </svg>
+      Message us on WhatsApp
+    </a>
+
+    <div class="footer-contact-row">
+      <a href="tel:+94706922157">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013.59 1.3h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.85a16 16 0 006.29 6.29l1.45-.87a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        0706 922 157
+      </a>
+      <div class="footer-sep"></div>
+      <a href="mailto:thebuildersofceylon@gmail.com">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        thebuildersofceylon@gmail.com
+      </a>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-bottom-logo">Builders of Ceylon</span>
+      <span>Serving the entire Western Province</span>
+      <span>© 2025 All rights reserved</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════ -->
+<script>
+/* --- Nav scroll --- */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 60);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* --- Scroll reveal --- */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('on');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+
+</body>
+</html>
